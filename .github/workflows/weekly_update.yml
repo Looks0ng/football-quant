@@ -1,0 +1,40 @@
+name: Weekly Football Data Update
+
+# กำหนดเวลาทำงาน (Triggers)
+on:
+  schedule:
+    # รันทุกวันจันทร์ ตอน 04:00 UTC (ประมาณ 11 โมงเช้าไทย) หลังบอลวีคเอนด์จบชัวร์ๆ
+    - cron: '0 4 * * 1'
+  # ปุ่มกดรันมือ (Manual Trigger) เอาไว้เทส
+  workflow_dispatch:
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. ดึงโค้ดล่าสุดมา
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 2. ติดตั้ง Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    # 3. ลง Library ที่ต้องใช้
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pandas supabase requests
+
+    # 4. รันสคริปต์ Smart Update
+    - name: Run update script
+      env:
+        # ดึงกุญแจจากตู้เซฟ GitHub มาใช้เป็น Environment Variable
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      run: |
+        cd football-quant-backend
+        python update_data.py
