@@ -36,5 +36,5 @@ jobs:
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
       run: |
-        cd football-quant-backend
+        cd backend
         python update_data.py
