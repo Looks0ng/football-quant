@@ -87,7 +87,11 @@ def update_database():
             "home_corners": row['HC'],
             "away_corners": row['AC'],
             "home_xg": round(h_xg, 2),
-            "away_xg": round(a_xg, 2)
+            "away_xg": round(a_xg, 2),
+            # --- เพิ่มส่วนดึงราคา Odds (Bet365) ---
+            "odds_home": row.get('B365H', 0), 
+            "odds_draw": row.get('B365D', 0),
+            "odds_away": row.get('B365A', 0)
         }
         matches_to_insert.append(match_data)
 
